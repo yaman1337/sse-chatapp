@@ -54,6 +54,6 @@ app.get("/messages", (req , res) => {
     }
 })
 
-app.listen(PORT || 9000, () => {
+app.listen(PORT || process.env.PORT || 9000, () => {
     console.log("listening on port " + PORT)
 })
