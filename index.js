@@ -42,7 +42,7 @@ app.get("/messages", (req , res) => {
     try {
 
         res.setHeader("Content-Type", "text/event-stream");
-
+        res.write("data: " + "connection establised \n\n")
         event.on("messageReceived", (username, message) => {
             let data = JSON.stringify({username, message});
             res.write("data: " + `${data}\n\n`)
