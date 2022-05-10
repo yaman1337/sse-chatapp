@@ -2,15 +2,15 @@ const MESSAGE_SELECTOR = "#message";
 const BUTTON_SELECTOR = ".send-btn";
 const MESSAGE_CONTAINER = ".messages";
 const RESET_USERNAME_SELECTOR = "#reset_username";
-const JOIN_ROOM_SELECTOR = "#join_room";
 let username;
+
+let room = window.location.search.split("name=")[1];
 
 const send_button = document.querySelector(BUTTON_SELECTOR);
 const message_container = document.querySelector(MESSAGE_CONTAINER);
 const reset_username_button = document.querySelector(RESET_USERNAME_SELECTOR);
-const join_room_button = document.querySelector(JOIN_ROOM_SELECTOR);
 
-const eventSource = new EventSource("/messages");
+const eventSource = new EventSource(`/room-messages?room=${room}`);
 
 username = localStorage.getItem("username");
 
@@ -28,25 +28,18 @@ reset_username_button.addEventListener("click", () => {
 
 });
 
-join_room_button.addEventListener("click", () => {
-  
-  let room_name = prompt("Enter room name");
-  if(!room_name) return;
-  window.location.assign(`/room.html?name=${room_name}`);
-
-});
 
 send_button.addEventListener("click", () => {
   let message = document.querySelector(MESSAGE_SELECTOR);
 
   if (message.value === "") return;
 
-  fetch("/send", {
+  fetch("/send-private", {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
-    body: JSON.stringify({ username, message: message.value }),
+    body: JSON.stringify({ username, message: message.value, room }),
   });
 
   message.value = "";

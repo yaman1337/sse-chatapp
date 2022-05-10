@@ -11,18 +11,13 @@ app.use(express.static("public"));
 app.use(express.json());
 
 /*
-    Serves the static file.
-*/
-app.get("/" ,( _,res) => res.sendFile("/static/index.html"));
-
-/*
     This endpoint receives message from the client and emits messageReceived event.
 */
 app.post("/send", (req, res) => {
     try {
         const { username,  message } = req.body;
 
-        if(!username || !message) return res.status(400).json({error: "Invalid input."})
+        if(!username || !message) return res.status(400).json({error: "Invalid input."});
 
         event.emit("messageReceived", username, message);
 
@@ -52,8 +47,49 @@ app.get("/messages", (req , res) => {
         console.log(error);
         res.status(500).json({error: "Something went wrong."})
     }
-})
+});
+
+/*
+    Chat room feature
+*/
+app.post("/send-private", (req , res) => {
+    try {
+
+        const { username, message, room } = req.body;
+        if(!username || !message || !room) return res.status(400).json({error: "Invalid input."})
+
+        event.emit("privateMessageReceived", username, message, room);
+
+        res.end();
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error: "Something went wrong."})
+    }
+});
+
+app.get("/room-messages", (req ,res) => {
+    try {
+
+        const current_room = req.query.room;
+        
+        res.setHeader("Content-Type", "text/event-stream");
+        res.write("data: connection establised \n\n");
+
+        event.on("privateMessageReceived", (username, message, room) => {
+            if(current_room != room) return;
+            const data = JSON.stringify({username, message});
+            res.write(`data: ${data} \n\n`);
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error: "Something went wrong."})
+    }
+});
+
+
 
 app.listen(process.env.PORT || PORT || 9000, () => {
     console.log("listening on port " + PORT)
-})
+});

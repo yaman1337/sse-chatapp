@@ -11,6 +11,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "nodemonConfig": {
+    "ext": "js, html"
+  },
   "devDependencies": {
     "nodemon": "^2.0.16"
   },
