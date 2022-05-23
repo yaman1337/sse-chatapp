@@ -7,19 +7,21 @@
     <title>Chat App</title>
   </head>
   <body>
+    <input type="submit" value="Reset Username" id="reset_username" />
+    <input type="submit" value="Join Room" id="join_room" />
 
-    
-      <input type="submit" value="Reset Username" id="reset_username">
-      <input type="submit" value="Join Room" id="join_room">
+    <br /><br />
 
-
-    <br><br>
-
-    <input type="text" name="message" id="message" placeholder="Enter message">
-    <input type="submit" value="Send" class="send-btn">
+    <input
+      type="text"
+      name="message"
+      id="message"
+      placeholder="Enter message"
+    />
+    <input type="submit" value="Send" class="send-btn" />
 
     <ul class="messages">
-
+      <li id="typing" style="display: none"></li>
     </ul>
   </body>
   <script src="./js/main.js"></script>
