@@ -163,6 +163,6 @@ app.get("/not-typing", (req , res) => {
 })
 
 
-app.listen(9000, () => {
-    console.log("listening on port " + PORT)
+app.listen(process.env.PORT || PORT || 9000, () => {
+    console.log("listening on port " + process.env.PORT || PORT || 9000)
 });
